@@ -1,30 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
- 
+
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <unistd.h>
+#endif
+
+/* This function clears the screen.
+ */
+void clear() {
+        for (int x = 0; x < 100; x++)
+                printf("\n");
+}
+
 int main(void){
-     int t,s=0, m=0,i=0;   
-     
-     do {
-        system("cls");    
-        printf("Pomodoro\n\n");
-        printf("\n\t\t\t%dm:%ds\n\n",m,s);
-        if(s==60){
-            s=0;
-            m++;
+     int minutes = 0;
+     int seconds = 0;
+     int time_finished = 0;
+
+     while (time_finished != 1) {
+        clear();
+        printf("Pomodoro %dm:%ds\n", minutes, seconds);
+
+        if (seconds == 60) {
+            seconds = 0;
+            minutes++;
         }
-        if(m==25){
-            m=0;
-            for(t=0;t<8;t++){
+
+        if (minutes == 25) {
+            time_finished = 1;
+
+            /* Makes a sound with 500 Hertz a 500 ms long. */
+            for (int times = 0; times < 8; times++) {
+#ifdef _WIN32
                 Beep(500,500);
-                //makes a sound with a frequency of 500 Hertz and with a time of 500 milliseconds of duration.
-            }  
-        break;
-        }          
+#else
+                /* TODO */
+#endif
+            }
+
+        }
+
+#ifdef _WIN32
         Sleep(1000);
-        s++;
-    }while (i==0);
-    
-    system("pause");
+#else
+        sleep(1);
+#endif
+
+        seconds++;
+    }
+
+    char a = fgetc(stdin);
+
     return 0;
 }
