@@ -36,7 +36,7 @@ int main(void){
 #ifdef _WIN32
                 Beep(500,500);
 #else
-                /* TODO */
+                printf("\a\n");
 #endif
             }
 
